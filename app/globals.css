@@ -1,26 +1,80 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* [STRATEGY: VISUAL AUTHORITY]
+  - จัดการระบบสีแบบ High-Contrast เพื่อความชัดเจนของข้อมูล
+  - ตั้งค่า Font Stack ให้รองรับทั้งภาษาไทยและอังกฤษอย่างลื่นไหล
+*/
 
 @theme inline {
+  /* ระบบสีหลักของ Unlinkth */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  
+  /* ระบบฟอนต์ที่เน้นความมั่นคง (Authority) */
+  --font-sans: "Inter", "Sarabun", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-mono, monospace;
+  
+  /* เพิ่มรัศมีขอบที่เป็นเอกลักษณ์ */
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2.5rem;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #09090b; /* Zinc 950 เพื่อความคมชัด */
+  
+  /* ระบบสี Accent สำหรับ Trust Signals */
+  --primary: #2563eb; /* Blue 600 */
+  --success: #10b981; /* Emerald 500 */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #000000; /* Pitch Black เพื่อความประหยัดพลังงานและพรีเมียม */
+    --foreground: #fafafa; /* Zinc 50 */
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 📍 Global Base Styles */
+@layer base {
+  * {
+    @apply border-zinc-200 dark:border-zinc-800 outline-zinc-500/30;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* ป้องกัน Scrollbar เด้งเวลาเปิด Modal */
+    margin-right: calc(100vw - 100%);
+    overflow-x: hidden;
+  }
+
+  /* ปรับแต่ง Scrollbar ให้ดู Minimal แบบ Unlinkth */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-zinc-200 dark:bg-zinc-800 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-300 dark:bg-zinc-700;
+  }
+}
+
+/* 🎨 Utility Layers */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .font-thai {
+    font-family: "Sarabun", sans-serif;
+  }
 }
