@@ -5,7 +5,8 @@ import { allWikiArticles } from '@/data/wiki/articles'
 import { WikiArticle } from '@/types/wiki'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://unlinkth.com' // ปรับตาม Domain จริงของคุณ
+  // ✅ แก้ไขเป็นโดเมนใหม่ที่คุณตั้งค่าใน Vercel
+  const baseUrl = 'https://www.wiki.unlink-th.com' 
 
   const wikiUrls = (allWikiArticles ?? []).map((article: WikiArticle) => ({
     url: `${baseUrl}/wiki/${article.slug}`,
