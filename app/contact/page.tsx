@@ -1,168 +1,215 @@
 /** @format */
 
-"use client";
+'use client'
 
-import React from "react";
-// 1. เพิ่มการ Import 'Variants' และ 'Easing' เพื่อระบุ Type ให้ชัดเจน
-import { motion, Variants } from "framer-motion";
-import { Mail, Globe, ShieldCheck, Lock, ExternalLink, Linkedin } from "lucide-react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import React, { useState } from 'react'
+import { motion } from 'framer-motion'
+import {
+  Send,
+  MessageSquare,
+  ShieldCheck,
+  Clock,
+  ChevronRight,
+  CheckCircle2,
+} from 'lucide-react'
+
+import Header from '@/components/shared/Header'
+import Footer from '@/components/shared/Footer'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 /**
- * [FIX: TYPE ASSIGNMENT FOR NEXT.JS BUILD]
- * ปรับปรุงการประกาศ FADE_UP ให้เป็น Type 'Variants' และใช้ Cubic Bezier สำหรับ ease
- * เพื่อป้องกัน Error: Type 'string' is not assignable to type 'Easing'
+ * [STRATEGY: TRUST-BASED CONVERSION]
+ * - Clarity: บอกขั้นตอนการทำงานที่ชัดเจน (Process Transparency)
+ * - Safety: เน้นย้ำเรื่องการรักษาความลับ (Confidentiality)
+ * - UI: ใช้ Shadcn UI Components เพื่อความสม่ำเสมอของ Design System
  */
-const FADE_UP: Variants = {
-  hidden: { 
-    opacity: 0, 
-    y: 15 
-  },
-  show: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { 
-      duration: 0.5, 
-      // ใช้ Cubic Bezier แทนคำว่า "easeOut" เพื่อความปลอดภัยระดับ Type ใน TS
-      ease: [0.33, 1, 0.68, 1] 
-    } 
-  }
-};
 
 export default function ContactPage() {
-  const fullName = "นายตัวอย่าง Unlinkth";
-  const contactEmail = "unlinkth.example@gmail.com";
-  const linkedinUrl = "https://www.linkedin.com/in/นายตัวอย่าง-unlinkth-4936623a5";
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Logic สำหรับส่งข้อมูล (เช่นผ่าน API Route หรือ Email Service)
+    setIsSubmitted(true)
+  }
 
   return (
-    <div className="flex min-h-screen flex-col bg-white font-sans selection:bg-blue-100 dark:bg-black dark:selection:bg-blue-900">
+    <div className="flex min-h-screen flex-col bg-white font-sans dark:bg-black">
       <Header />
-      
-      <main className="flex-grow flex flex-col items-center px-6 py-20 sm:py-32">
-        <div className="w-full max-w-2xl space-y-16">
-          
-          {/* 🏛️ Section 1: Strategic Header */}
-          <motion.header 
-            initial="hidden"
-            animate="show"
-            variants={FADE_UP}
-            className="space-y-6 text-center sm:text-left"
-          >
-            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-[10px] font-black tracking-[0.2em] text-emerald-700 uppercase dark:bg-emerald-950/30 dark:text-emerald-400">
-              <Lock className="w-3 h-3" /> Secure Consult Channel
-            </div>
-            <h1 className="text-4xl font-black tracking-tighter text-black dark:text-zinc-50 sm:text-5xl">
-              ปรึกษาด้านภาพลักษณ์ดิจิทัล
-            </h1>
-            <p className="text-xl text-zinc-500 dark:text-zinc-400 leading-relaxed font-medium font-thai">
-              หากท่านต้องการสอบถามข้อมูล หรือต้องการยืนยันข้อเท็จจริงเกี่ยวกับ <span className="text-zinc-900 dark:text-zinc-200">{fullName}</span> โปรดติดต่อผ่านช่องทางอย่างเป็นทางการ
-            </p>
-          </motion.header>
 
-          {/* 🛡️ Section 2: Contact Channels */}
-          <motion.section 
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            variants={FADE_UP}
-            className="grid gap-6 sm:grid-cols-2"
-          >
-            <div className="group rounded-3xl border border-zinc-100 p-8 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 transition-all hover:border-blue-600/30 hover:shadow-2xl hover:shadow-blue-500/5">
-              <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-500/20">
-                <Mail className="w-5 h-5" />
-              </div>
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 dark:text-blue-400">Direct Protocol</h3>
-              <p className="mt-4 text-lg font-black text-black dark:text-white truncate">
-                <a href={`mailto:${contactEmail}`} className="hover:underline decoration-blue-500/50 underline-offset-4">
-                  {contactEmail}
-                </a>
-              </p>
-              <p className="mt-2 text-xs font-bold text-zinc-400 uppercase tracking-widest italic font-thai">ตอบกลับภายใน 24 ชม.</p>
-            </div>
-
-            <div className="group rounded-3xl border border-zinc-100 p-8 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 transition-all hover:border-zinc-900/30">
-              <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 dark:bg-white text-white dark:text-black">
-                <Globe className="w-5 h-5" />
-              </div>
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Consultation Hours</h3>
-              <p className="mt-4 text-lg font-black text-black dark:text-white font-thai">
-                จันทร์ - ศุกร์, 09:00 - 18:00
-              </p>
-              <p className="mt-2 text-xs font-bold text-zinc-400 uppercase tracking-widest italic">GMT+7 (Bangkok)</p>
-            </div>
-          </motion.section>
-
-          {/* 🔍 Section 3: Identity Infrastructure (LinkedIn Verification) */}
-          <motion.section 
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            variants={FADE_UP}
-            className="space-y-8"
-          >
-            <div className="flex items-center gap-4">
-               <h2 className="text-2xl font-black tracking-tight text-black dark:text-zinc-50 uppercase">Verified Infrastructure</h2>
-               <div className="h-px flex-grow bg-zinc-100 dark:bg-zinc-900" />
-            </div>
-            
-            <div className="grid gap-4">
-              <a 
-                href={linkedinUrl} 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between rounded-2xl bg-zinc-100/30 p-6 transition-all hover:bg-[#0A66C2] hover:text-white dark:bg-zinc-900/30 group border border-transparent hover:border-[#0A66C2]/30 shadow-sm"
+      <main className="flex-grow px-6 pt-32 pb-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid gap-16 lg:grid-cols-2">
+            {/* 🏛️ Left: Brand Message & Trust Points */}
+            <div className="space-y-12">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="space-y-6"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-white/10">
-                    <Linkedin className="w-5 h-5 text-[#0A66C2] group-hover:text-white" />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="font-black text-sm uppercase tracking-wider">LinkedIn Official Profile</span>
-                    <span className="text-[10px] font-bold opacity-60 uppercase tracking-widest">Professional Identity Verified</span>
-                  </div>
+                <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-[10px] font-black tracking-widest text-blue-600 uppercase dark:bg-blue-950/30">
+                  <MessageSquare className="h-3 w-3" /> Get in Touch
                 </div>
-                <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </a>
+                <h1 className="text-5xl leading-[0.9] font-black tracking-tighter text-zinc-900 sm:text-7xl dark:text-zinc-50">
+                  ปรึกษาเรา <br />
+                  <span className="text-blue-600">อย่างเป็นส่วนตัว</span>
+                </h1>
+                <p className="font-thai text-xl leading-relaxed font-medium text-zinc-500 dark:text-zinc-400">
+                  ทีมผู้เชี่ยวชาญของ {`UNLINK-TH`}{' '}
+                  พร้อมรับฟังและประเมินแนวทางการจัดการชื่อเสียงและสิทธิทางดิจิทัลของคุณ
+                  โดยยึดถือความเป็นส่วนตัวสูงสุด
+                </p>
+              </motion.div>
 
-              <a 
-                href="https://medium.com/@unlinkth.example" 
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between rounded-2xl bg-zinc-100/30 p-6 transition-all hover:bg-zinc-950 hover:text-white dark:bg-zinc-900/30 dark:hover:bg-white dark:hover:text-black group border border-transparent hover:border-zinc-200 dark:hover:border-zinc-700 shadow-sm"
-              >
-                <div className="flex items-center gap-4">
-                  <ShieldCheck className="w-5 h-5 text-zinc-400 group-hover:text-blue-400" />
-                  <div className="flex flex-col">
-                    <span className="font-black text-sm uppercase tracking-wider">Medium Portfolio</span>
-                    <span className="text-[10px] font-bold opacity-60 uppercase tracking-widest">Strategy & Case Studies</span>
+              {/* Trust Indicators */}
+              <div className="grid gap-6 sm:grid-cols-2">
+                {[
+                  {
+                    icon: ShieldCheck,
+                    title: 'รักษาความลับ 100%',
+                    desc: 'ข้อมูลของคุณจะถูกจัดเก็บเป็นความลับภายใต้มาตรฐาน NDA',
+                  },
+                  {
+                    icon: Clock,
+                    title: 'ตอบกลับใน 24 ชม.',
+                    desc: 'เราให้ความสำคัญกับทุกปัญหาและจะติดต่อกลับโดยเร็วที่สุด',
+                  },
+                ].map((item, i) => (
+                  <div key={i} className="space-y-3">
+                    <item.icon className="h-6 w-6 text-blue-600" />
+                    <h3 className="font-black tracking-tighter text-zinc-900 uppercase dark:text-zinc-100">
+                      {item.title}
+                    </h3>
+                    <p className="font-thai text-sm text-zinc-500 dark:text-zinc-400">
+                      {item.desc}
+                    </p>
                   </div>
-                </div>
-                <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </a>
+                ))}
+              </div>
             </div>
-          </motion.section>
 
-          {/* ⚡ Strategic Commitment Badge */}
-          <motion.div 
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true }}
-            variants={FADE_UP}
-            className="rounded-[2.5rem] bg-zinc-950 p-10 dark:bg-zinc-50 shadow-3xl overflow-hidden relative"
-          >
-            <p className="relative z-10 text-base sm:text-lg text-center font-bold leading-relaxed text-zinc-300 dark:text-zinc-600 font-thai">
-              <span className="text-white dark:text-black italic">"ความโปร่งใสคือหัวใจของความเชื่อมั่น"</span> <br />
-              เราพร้อมให้ข้อมูลที่ถูกต้องที่สุดแก่ท่านภายใต้มาตรการ <br className="hidden sm:block" /> 
-              การรักษาความลับ (NDA) ระดับสูงสุด
-            </p>
-            <div className="absolute top-0 right-0 -mr-10 -mt-10 w-32 h-32 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
-          </motion.div>
+            {/* 📩 Right: Contact Form */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="relative rounded-[2.5rem] border border-zinc-100 bg-zinc-50/50 p-8 sm:p-12 dark:border-zinc-800 dark:bg-zinc-900/30"
+            >
+              {!isSubmitted ? (
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="name"
+                        className="text-[10px] font-black tracking-widest text-zinc-400 uppercase"
+                      >
+                        ชื่อ-นามสกุล
+                      </Label>
+                      <Input
+                        id="name"
+                        placeholder="สมชาย รักดี"
+                        required
+                        className="font-thai rounded-xl border-zinc-200 bg-white py-6 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-950"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="email"
+                        className="text-[10px] font-black tracking-widest text-zinc-400 uppercase"
+                      >
+                        อีเมลติดต่อ
+                      </Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="somchai@example.com"
+                        required
+                        className="font-thai rounded-xl border-zinc-200 bg-white py-6 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-950"
+                      />
+                    </div>
+                  </div>
 
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="subject"
+                      className="text-[10px] font-black tracking-widest text-zinc-400 uppercase"
+                    >
+                      หัวข้อที่ต้องการปรึกษา
+                    </Label>
+                    <Input
+                      id="subject"
+                      placeholder="เช่น ขอให้ลบข้อมูลจาก Google หรือ ปรึกษาเรื่อง PDPA"
+                      required
+                      className="font-thai rounded-xl border-zinc-200 bg-white py-6 focus:ring-blue-600 dark:border-zinc-700 dark:bg-zinc-950"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="message"
+                      className="text-[10px] font-black tracking-widest text-zinc-400 uppercase"
+                    >
+                      รายละเอียดเบื้องต้น
+                    </Label>
+                    <textarea
+                      id="message"
+                      rows={4}
+                      placeholder="อธิบายสถานการณ์ของคุณโดยสังเขป..."
+                      className="font-thai flex w-full rounded-xl border border-zinc-200 bg-white px-3 py-4 text-sm focus:ring-2 focus:ring-blue-600 focus:outline-none dark:border-zinc-700 dark:bg-zinc-950"
+                      required
+                    ></textarea>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="group h-16 w-full rounded-2xl bg-blue-600 text-lg font-black text-white transition-all hover:bg-zinc-900 dark:hover:bg-white dark:hover:text-black"
+                  >
+                    ส่งคำขอรับคำปรึกษา{' '}
+                    <Send className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                  </Button>
+
+                  <p className="text-center text-[10px] font-medium tracking-tight text-zinc-400 uppercase">
+                    By clicking submit, you agree to our privacy policy and data
+                    protection terms.
+                  </p>
+                </form>
+              ) : (
+                /* Success State */
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="flex flex-col items-center justify-center space-y-6 py-12 text-center"
+                >
+                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
+                    <CheckCircle2 className="h-10 w-10 text-blue-600" />
+                  </div>
+                  <div className="space-y-2">
+                    <h2 className="text-3xl font-black tracking-tighter uppercase">
+                      ส่งข้อมูลสำเร็จ
+                    </h2>
+                    <p className="font-thai text-zinc-500 dark:text-zinc-400">
+                      เราได้รับข้อมูลของคุณแล้ว ทีมผู้เชี่ยวชาญจะทำการวิเคราะห์{' '}
+                      <br />
+                      และติดต่อกลับทางอีเมลที่คุณระบุไว้ภายใน 24 ชั่วโมง
+                    </p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsSubmitted(false)}
+                    className="rounded-xl font-black tracking-widest uppercase"
+                  >
+                    ส่งข้อความอื่นเพิ่ม
+                  </Button>
+                </motion.div>
+              )}
+            </motion.div>
+          </div>
         </div>
       </main>
 
       <Footer />
     </div>
-  );
+  )
 }

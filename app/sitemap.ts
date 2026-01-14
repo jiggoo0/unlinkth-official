@@ -1,33 +1,31 @@
+/** @format */
+
 import { MetadataRoute } from 'next'
+import { allWikiArticles } from '@/data/wiki/articles'
+import { WikiArticle } from '@/types/wiki'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  // เปลี่ยนเป็น URL จริงที่คุณได้จาก Vercel เพื่อให้ Google ตามไปถูกที่
-  const baseUrl = 'https://unlinkth-official.vercel.app' 
-  
+  const baseUrl = 'https://unlinkth.com' // ปรับตาม Domain จริงของคุณ
+
+  const wikiUrls = (allWikiArticles ?? []).map((article: WikiArticle) => ({
+    url: `${baseUrl}/wiki/${article.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
+  const categoryUrls = Array.from(
+    new Set((allWikiArticles ?? []).map((a: WikiArticle) => a.category))
+  ).map((slug: string) => ({
+    url: `${baseUrl}/wiki/category/${slug.toLowerCase()}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
   return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'daily',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/case-study`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
+    { url: baseUrl, lastModified: new Date(), priority: 1 },
+    ...wikiUrls,
+    ...categoryUrls,
   ]
 }

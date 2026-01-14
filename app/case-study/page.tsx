@@ -1,171 +1,162 @@
 /** @format */
 
-"use client";
+'use client'
 
-import React from "react";
-import Link from "next/link";
-// 1. เพิ่มการนำเข้า Variants เพื่อแก้ปัญหา Type Error
-import { motion, Variants } from "framer-motion";
-import { ShieldCheck, MessageSquare, ArrowUpRight, Lock, Linkedin, Search } from "lucide-react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import Schema from "@/components/Schema";
+import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowUpRight, ShieldCheck, Search, Scale, Filter } from 'lucide-react'
+import Header from '@/components/shared/Header'
+import Footer from '@/components/shared/Footer'
+import { cases, CaseStudy } from '@/data/case-study/cases'
 
 /**
- * [FIX: TYPE ASSIGNMENT FOR NEXT.JS BUILD]
- * ระบุ Type 'Variants' ให้กับตัวแปร เพื่อป้องกัน Error: 
- * "Type 'string' is not assignable to type 'AnimationGeneratorType'"
+ * [STRATEGY: SOCIAL PROOF & AUTHORITY]
+ * - Inclusive Content: แสดงผลลัพธ์ที่เป็นรูปธรรมเพื่อให้ทุกฐานะเข้าถึงความปลอดภัย
+ * - Dynamic Filtering: ช่วยให้ผู้ใช้หาเคสที่ตรงกับปัญหาของตนเองได้เร็วที่สุด
+ * - Clean UI: ใช้การออกแบบที่โปร่งใส เน้นความไว้วางใจ (Trust)
  */
-const FADE_UP_ANIMATION: Variants = {
-  hidden: { 
-    opacity: 0, 
-    y: 20 
-  },
-  show: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { 
-      type: "spring", // กำหนดค่าให้ตรงกับ Literal Type ของ Framer Motion
-      damping: 25, 
-      stiffness: 100 
-    } 
-  }
-};
 
-const PROTOCOLS = [
-  {
-    step: "01",
-    title: "สร้าง 'บ้านหลังหลัก' ให้ตัวตนของคุณ",
-    description: "เราจะสร้างเว็บไซต์ที่เป็นเหมือนหน้าตาของคุณจริงๆ ขึ้นมาใหม่ โดยใช้เทคโนโลยีที่ทันสมัยที่สุด เพื่อให้ Google มั่นใจว่านี่คือ 'ข้อมูลที่ถูกต้องและเป็นปัจจุบันที่สุด' เมื่อคนกดเข้ามาดู เขาจะได้รับรู้เรื่องราวที่ถูกต้องจากคุณโดยตรงทันที",
-    icon: <ShieldCheck className="w-6 h-6 text-white" />
-  },
-  {
-    step: "02",
-    title: "ยืนยันกับ Google ว่าคุณคือ 'ตัวจริง'",
-    description: "เราทำหน้าที่เป็นล่ามคอยสื่อสารกับระบบหลังบ้านของ Google เพื่อบอกว่าคุณคือใครและทำอะไรอยู่ ผลที่ได้คือข้อมูลของคุณจะแสดงผลออกมาอย่างเป็นระเบียบและน่าเชื่อถือ ช่วยลดความสับสนเวลาคนไปเจอข่าวลือที่ไม่อยู่บนพื้นฐานความจริง",
-    icon: <Lock className="w-6 h-6 text-white" />
-  },
-  {
-    step: "03",
-    title: "ดันเรื่องดีๆ ขึ้นมา... เบียดเรื่องไม่ดีออกไป",
-    description: "ไม่ใช่แค่ทำเว็บเดียวแล้วจบ แต่เราจะช่วยสร้าง 'พื้นที่สีขาว' รอบๆ ตัวคุณ เพื่อช่วยเบียดลิงก์ที่สร้างความเสียหายให้ตกไปอยู่หน้าลึกๆ จนคนหาไม่เจอ เพื่อให้หน้าแรกของ Google เหลือแต่ข้อมูลที่ส่งเสริมภาพลักษณ์ของคุณจริงๆ",
-    icon: <ArrowUpRight className="w-6 h-6 text-white" />
-  }
-];
+export default function CaseStudyPage() {
+  const [filter, setFilter] = useState<CaseStudy['category'] | 'all'>('all')
 
-export default function CaseStudy() {
-  const linkedinUrl = "https://www.linkedin.com/in/นายตัวอย่าง-unlinkth-4936623a5";
+  const filteredCases =
+    filter === 'all' ? cases : cases.filter((c) => c.category === filter)
 
   return (
-    <div className="min-h-screen bg-white selection:bg-blue-100 dark:bg-black dark:selection:bg-blue-900 font-sans">
-      <Schema type="HowTo" />
-      
+    <div className="flex min-h-screen flex-col bg-white font-sans selection:bg-blue-100 dark:bg-black dark:selection:bg-blue-900">
       <Header />
-      
-      <main className="max-w-4xl mx-auto px-6 py-24 sm:py-32">
-        
-        {/* Hero Section */}
-        <motion.div 
-          initial="hidden"
-          animate="show"
-          variants={FADE_UP_ANIMATION}
-          className="text-center mb-24 space-y-8"
-        >
-          <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-[10px] font-black tracking-[0.2em] text-blue-600 uppercase dark:bg-blue-950/30">
-            <Search className="w-3 h-3" /> Search Engine Restoration
-          </div>
-          <h1 className="text-4xl sm:text-7xl font-black text-zinc-900 dark:text-zinc-50 tracking-tighter">
-            คืนความมั่นใจ... <br />
-            ให้ <span className="text-blue-600 font-thai tracking-normal underline decoration-blue-500/20 underline-offset-8">"ชื่อ"</span> ของคุณ
-          </h1>
-          <p className="text-xl text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed font-medium font-thai">
-            เพราะเวลาคนค้นหาชื่อคุณบน Google เขาควรได้เจอ "ความจริง" ที่คุณอยากบอก 
-            เราจึงช่วยจัดระเบียบข้อมูลใหม่ เพื่อปกป้องชื่อเสียงที่คุณสร้างมาทั้งชีวิต
-          </p>
-          
-          <div className="flex justify-center pt-4">
-            <a 
-              href={linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-xs font-bold text-zinc-400 hover:text-[#0A66C2] transition-colors"
-            >
-              <Linkedin className="w-4 h-4" />
-              โดยผู้เชี่ยวชาญที่ได้รับการยืนยันประวัติ
-            </a>
-          </div>
-        </motion.div>
 
-        {/* Protocol Steps */}
-        <div className="grid gap-10">
-          {PROTOCOLS.map((item) => (
-            <motion.section
-              key={item.step}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={FADE_UP_ANIMATION}
-              className="group relative p-8 sm:p-12 rounded-[3.5rem] border border-zinc-100 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 transition-all duration-500 hover:bg-white dark:hover:bg-zinc-900 hover:shadow-2xl hover:shadow-blue-500/5"
-            >
-              <div className="flex flex-col sm:flex-row items-start gap-10">
-                <div className="flex items-center justify-center shrink-0 w-16 h-16 rounded-[2rem] bg-zinc-900 dark:bg-blue-600 shadow-xl text-white font-black text-2xl group-hover:scale-110 transition-transform duration-500">
-                  {item.step}
-                </div>
-                <div className="space-y-4">
-                  <h3 className="text-2xl sm:text-3xl font-black text-zinc-900 dark:text-zinc-50 leading-tight">
-                    {item.title}
-                  </h3>
-                  <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium font-thai">
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-            </motion.section>
-          ))}
-        </div>
-
-        {/* Final CTA */}
-        <motion.div 
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={FADE_UP_ANIMATION}
-          className="mt-32 p-10 sm:p-16 bg-zinc-950 text-white rounded-[4.5rem] text-center shadow-3xl relative overflow-hidden dark:bg-zinc-900 border border-white/5"
-        >
-          <div className="relative z-10 space-y-10">
-            <div className="flex justify-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-[10px] font-black tracking-widest uppercase">
-                <Lock className="w-3 h-3 text-emerald-400" /> 
-                Official Unlinkth Privacy Protocol
-              </div>
+      <main className="flex-grow px-6 pt-32 pb-24">
+        <div className="mx-auto max-w-5xl">
+          {/* 🏛️ Header Section */}
+          <header className="mb-16 max-w-3xl space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-[10px] font-black tracking-[0.2em] text-blue-600 uppercase dark:bg-blue-950/30">
+              <ShieldCheck className="h-3 w-3" /> Proven Results
             </div>
-            
-            <h2 className="text-4xl sm:text-6xl font-black tracking-tighter leading-tight">
-              คืนความสบายใจ <br className="sm:hidden" /> ให้คุณวันนี้
-            </h2>
-            
-            <p className="opacity-70 text-zinc-300 font-medium text-lg max-w-xl mx-auto leading-relaxed font-thai">
-              ผมเข้าใจดีว่าชื่อเสียงสำคัญแค่ไหน ทุกอย่างที่คุยกันจะเป็นความลับสูงสุด 
-              และผมจะดูแลงานนี้ให้ดีที่สุดจนกว่าคุณจะพอใจครับ
+            <h1 className="text-4xl font-black tracking-tighter text-zinc-900 sm:text-6xl dark:text-zinc-50">
+              กรณีศึกษา <br className="sm:hidden" />
+              <span className="font-thai tracking-normal text-blue-600">
+                ความสำเร็จ
+              </span>
+            </h1>
+            <p className="text-xl leading-relaxed font-medium text-zinc-500 dark:text-zinc-400">
+              ตัวอย่างผลลัพธ์การจัดการข้อมูลและกู้คืนชื่อเสียงที่เราทำให้กับลูกค้าภายใต้กรอบกฎหมายและความเป็นส่วนตัวสูงสุด
             </p>
+          </header>
 
-            <div className="pt-6">
-              <Link 
-                href="/contact" 
-                className="inline-flex items-center justify-center gap-4 bg-blue-600 text-white px-14 py-7 rounded-full font-black text-xl transition-all hover:bg-white hover:text-black hover:scale-105 active:scale-95 shadow-2xl shadow-blue-600/30"
-              >
-                <MessageSquare className="w-6 h-6" />
-                เริ่มแผนการกู้คืนภาพลักษณ์
-              </Link>
+          {/* 🔍 Filter Bar */}
+          <div className="mb-12 flex flex-wrap items-center gap-3 border-b border-zinc-100 pb-8 dark:border-zinc-900">
+            <div className="mr-4 flex items-center gap-2 text-xs font-black tracking-widest text-zinc-400 uppercase">
+              <Filter className="h-3 w-3" /> Filter by:
             </div>
+            {(['all', 'search', 'social', 'legal'] as const).map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`rounded-full px-6 py-2 text-xs font-black tracking-tighter uppercase transition-all ${
+                  filter === cat
+                    ? 'bg-zinc-900 text-white dark:bg-white dark:text-black'
+                    : 'bg-zinc-50 text-zinc-400 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800'
+                }`}
+              >
+                {cat === 'all'
+                  ? 'ทั้งหมด'
+                  : cat === 'search'
+                    ? 'Google Search'
+                    : cat === 'social'
+                      ? 'Social Media'
+                      : 'Legal Case'}
+              </button>
+            ))}
           </div>
-          
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-600/30 rounded-full blur-[120px] pointer-events-none"></div>
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-900/20 rounded-full blur-[120px] pointer-events-none"></div>
-        </motion.div>
+
+          {/* 🗂️ Case Studies Grid */}
+          <motion.div layout className="grid gap-8 sm:grid-cols-2">
+            <AnimatePresence mode="popLayout">
+              {filteredCases.map((item) => (
+                <motion.article
+                  key={item.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                  className="group relative flex flex-col justify-between overflow-hidden rounded-[2.5rem] border border-zinc-100 bg-white p-8 shadow-sm transition-all hover:border-blue-200 hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-900/50 dark:hover:border-blue-900/50"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950/30">
+                        {item.category === 'search' && (
+                          <Search className="h-5 w-5" />
+                        )}
+                        {item.category === 'social' && (
+                          <ShieldCheck className="h-5 w-5" />
+                        )}
+                        {item.category === 'legal' && (
+                          <Scale className="h-5 w-5" />
+                        )}
+                      </div>
+                      <span className="text-[10px] font-black tracking-widest text-zinc-400 uppercase">
+                        Case ID: {item.id.padStart(3, '0')}
+                      </span>
+                    </div>
+
+                    <h3 className="text-2xl font-black text-zinc-900 dark:text-zinc-50">
+                      {item.title}
+                    </h3>
+                    <p className="line-clamp-2 leading-relaxed font-medium text-zinc-500 dark:text-zinc-400">
+                      {item.description}
+                    </p>
+
+                    <div className="rounded-2xl bg-emerald-50/50 p-4 dark:bg-emerald-950/10">
+                      <p className="mb-1 text-[10px] font-black tracking-widest text-emerald-600 uppercase">
+                        Outcome
+                      </p>
+                      <p className="text-sm font-bold text-zinc-700 dark:text-emerald-400">
+                        {item.outcome}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-8 border-t border-zinc-50 pt-6 dark:border-zinc-800/50">
+                    <a
+                      href={`/case-study/${item.slug}`}
+                      className="inline-flex items-center gap-2 text-sm font-black text-zinc-900 transition-colors hover:text-blue-600 dark:text-zinc-50 dark:hover:text-blue-400"
+                    >
+                      อ่านรายละเอียดฉบับเต็ม{' '}
+                      <ArrowUpRight className="h-4 w-4" />
+                    </a>
+                  </div>
+                </motion.article>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+
+          {/* ⚡ CTA Section */}
+          <div className="relative mt-24 overflow-hidden rounded-[3rem] bg-zinc-950 p-12 text-center text-white dark:bg-zinc-900">
+            <div className="relative z-10 space-y-6">
+              <h2 className="text-3xl font-black">
+                กรณีของคุณคล้ายกับเหตุการณ์เหล่านี้หรือไม่?
+              </h2>
+              <p className="mx-auto max-w-xl font-medium text-zinc-400">
+                อย่าปล่อยให้ข้อมูลที่ผิดพลาดทำลายโอกาสในอนาคตของคุณ
+                ปรึกษาทีมงานเพื่อประเมินแนวทางการจัดการเบื้องต้นโดยไม่มีค่าใช้จ่าย
+              </p>
+              <div className="pt-4">
+                <a
+                  href="/contact"
+                  className="inline-flex h-14 items-center rounded-2xl bg-white px-10 font-black text-black shadow-lg transition-all hover:bg-blue-500 hover:text-white active:scale-95"
+                >
+                  เริ่มปรึกษาตอนนี้
+                </a>
+              </div>
+            </div>
+            <div className="absolute top-0 right-0 -mt-32 -mr-32 h-64 w-64 rounded-full bg-blue-600/20 blur-3xl" />
+          </div>
+        </div>
       </main>
-      
+
       <Footer />
     </div>
-  );
+  )
 }

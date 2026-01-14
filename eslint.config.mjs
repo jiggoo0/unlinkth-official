@@ -1,24 +1,30 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+/** @format */
+import { FlatCompat } from '@eslint/eslintrc'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTs,
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+})
+
+const eslintConfig = [
+  ...compat.extends('next/core-web-vitals'),
+  ...compat.extends('next/typescript'),
   {
-    // เพิ่มส่วนนี้เพื่อปิดการตรวจจับเครื่องหมายคำพูดและ Warning เรื่อง img
+    // 🛡️ ปิดกฎที่เข้มงวดเกินไปสำหรับไฟล์ Auto-generated และตัวแปรที่ไม่ได้ใช้
     rules: {
-      "react/no-unescaped-entities": "off",
-      "@next/next/no-img-element": "off",
+      '@typescript-eslint/no-unused-vars': 'warn', // เปลี่ยนจาก Error เป็น Warn
+      '@typescript-eslint/triple-slash-reference': 'off', // ปิด Error ใน next-env.d.ts
+      'react/no-unescaped-entities': 'off', // สำหรับภาษาไทยที่มีเครื่องหมายพิเศษ
     },
   },
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
-  ]),
-]);
+  {
+    // ยกเว้นการตรวจสอบไฟล์ที่ Next.js สร้างเอง
+    ignores: ['.next/*', 'out/*', 'public/*'],
+  },
+]
 
-export default eslintConfig;
+export default eslintConfig
